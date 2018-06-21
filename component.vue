@@ -207,12 +207,12 @@ export default {
         font-size: 18px;
         font-weight: 400;
         padding: 10px 0 10px 55px;
-        background-image: url('~@/assets/icons/common/bg_news_widget.svg');
+        background-image: url('~@/assets/icons/common/i.svg');
         &:hover {
           cursor: pointer;
           color: $colorButton;
           &::before {
-            background-image: url('~@/assets/icons/common/ico_arrow_blue.svg');
+            background-image: url('~@/assets/icons/common/i.svg');
           }
         }
         &::before {
@@ -223,7 +223,7 @@ export default {
           margin-top: -5px;
           width: 15px;
           height: 10px;
-          background-image: url('~@/assets/icons/common/ico_arrow_black.svg');
+          background-image: url('~@/assets/icons/common/i.svg');
           background-repeat: no-repeat;
           background-size: 100%;
           transition: 0.4s;
@@ -287,7 +287,7 @@ export default {
     border: 1px solid $colorButton;
     color: $colorButton;
     background-color: transparent;
-    background-image: url('~@/assets/icons/common/letter_ico.svg');
+    background-image: url('~@/assets/icons/common/i.svg');
     background-repeat: no-repeat;
     background-position: center left 35px;
     background-size: 12px;
@@ -322,7 +322,7 @@ export default {
         color: $white;
       }
       &.active {
-        background-image: url('~@/assets/icons/common/list_active.svg');
+        background-image: url('~@/assets/icons/common/i.svg');
         background-size: auto;
         background-repeat: no-repeat;
         background-position: right -1px center;
@@ -400,7 +400,7 @@ export default {
         padding-bottom: 20px;
         &::before {
           left: 0;
-          background-image: url('~@/assets/icons/common/ico_arrow_blue.svg');
+          background-image: url('~@/assets/icons/common/i.svg');
         }
       }
       &.active {
