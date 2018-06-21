@@ -116,7 +116,7 @@ export default {
       ok: resp => {
         this.faqModel = resp.page
         if (this.$route.params.question) {
-          if (this.$get.O('page_' + this.$route.params.question)._fetched) {
+          if (this.$get('page_' + this.$route.params.question)._fetched) {
             this.activeQuestion = this.$route.params.question
           } else {
             this.$router.replace({ name: '404' })
