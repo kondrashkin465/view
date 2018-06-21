@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <a class="help-page__button" href="mailto:support@cub.world">support@cub.world</a>
+      <a class="help-page__button" href="mailto:support">support</a>
 
       <div :class="[{'help-page__status_online':supportOnline}, 'help-page__status']">
         <span class="help-page__status-text">{{'status_support' | local}}</span>
