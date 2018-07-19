@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <a class="help-page__button" href="mailto:support">support</a>
+      <a class="help-page__button" href="mailto:support@cub.world">support@cub.world</a>
 
       <div :class="[{'help-page__status_online':supportOnline}, 'help-page__status']">
         <span class="help-page__status-text">{{'status_support' | local}}</span>
@@ -86,7 +86,102 @@
 </div>
 </template>
 
+<script>
+import Share from '@/components/common/Share'
+import { uniq } from 'lodash'
+import MetaMixin from '@/engine/mixins/metaMixin'
 
+export default {
+  name: 'HelpPage',
+  components: {
+    Share
+  },
+  mixins: [MetaMixin],
+  data () {
+    return {
+      faqModel: [],
+      activeQuestion: null, // url
+      activeCategory: 0,
+      defaultPageTitle: this.$local('page_help'),
+      curDay: new Date().getDay(),
+      utcHours: new Date().getUTCHours(),
+      isMobile: false
+    }
+  },
+  beforeMount () {
+    window.addEventListener('resize', this.handleResize)
+  },
+  created () {
+    request.then(this.$get.res({
+      ok: resp => {
+        this.faqModel = resp.page
+        if (this.$route.params.question) {
+          if (this.$get.O('page_' + this.$route.params.question)._fetched) {
+            this.activeQuestion = this.$route.params.question
+          } else {
+            this.$router.replace({ name: '404' })
+            return
+          }
+        } else {
+          this.activeQuestion = this.faqModel.find(question => question.idx === this.activeCategory).url
+        }
+        this.$router.replace({
+          name: 'HelpOpen',
+          params: {
+            question: this.activeQuestion
+          }
+        })
+      }
+    }))
+  },
+  computed: {
+    categoryFaq () {
+      return uniq(this.faqModel.map(faq => faq.idx)).sort()
+    },
+    supportOnline () {
+      if (this.utcHours >= 8 && this.utcHours < 18) return true
+    },
+    freeTime () {
+      if (this.curDay === 0 || this.curDay === 6) return true
+    }
+  },
+  watch: {
+    activeQuestion (url) {
+      if (!url) return
+      this.pageData = this.faqModel.find(obj => obj.url === url) || {}
+      this.activeCategory = this.pageData.idx
+    }
+  },
+  methods: {
+    handleResize () {
+      this.isMobile = window.offsetWidth < 900
+    },
+    showCategory (category) {
+      if (this.activeCategory === category) { return }
+      this.activeCategory = category
+      this.activeQuestion = this.faqModel.find(question => question.idx === category).url
+      this.$router.replace({
+        name: 'HelpOpen',
+        params: { question: this.activeQuestion }
+      })
+    },
+    showQuestion (question) {
+      if (this.activeQuestion === question.url) { return }
+      this.activeQuestion = question.url
+      this.$router.replace({
+        name: 'HelpOpen',
+        params: { question: this.activeQuestion }
+      })
+    },
+    questionByCategory (idx) {
+      return this.faqModel.filter(question => question.idx === idx)
+    }
+  },
+  mounted () {
+    this.handleResize()
+  }
+}
+</script>
 
 <style lang="scss">
 .help-page {
@@ -112,12 +207,12 @@
         font-size: 18px;
         font-weight: 400;
         padding: 10px 0 10px 55px;
-        background-image: url('~@/assets/icons/common/i.svg');
+        background-image: url('~@/assets/icons/common/bg_news_widget.svg');
         &:hover {
           cursor: pointer;
           color: $colorButton;
           &::before {
-            background-image: url('~@/assets/icons/common/i.svg');
+            background-image: url('~@/assets/icons/common/ico_arrow_blue.svg');
           }
         }
         &::before {
@@ -128,7 +223,7 @@
           margin-top: -5px;
           width: 15px;
           height: 10px;
-          background-image: url('~@/assets/icons/common/i.svg');
+          background-image: url('~@/assets/icons/common/ico_arrow_black.svg');
           background-repeat: no-repeat;
           background-size: 100%;
           transition: 0.4s;
@@ -192,7 +287,7 @@
     border: 1px solid $colorButton;
     color: $colorButton;
     background-color: transparent;
-    background-image: url('~@/assets/icons/common/i.svg');
+    background-image: url('~@/assets/icons/common/letter_ico.svg');
     background-repeat: no-repeat;
     background-position: center left 35px;
     background-size: 12px;
@@ -227,7 +322,7 @@
         color: $white;
       }
       &.active {
-        background-image: url('~@/assets/icons/common/i.svg');
+        background-image: url('~@/assets/icons/common/list_active.svg');
         background-size: auto;
         background-repeat: no-repeat;
         background-position: right -1px center;
@@ -305,7 +400,7 @@
         padding-bottom: 20px;
         &::before {
           left: 0;
-          background-image: url('~@/assets/icons/common/i.svg');
+          background-image: url('~@/assets/icons/common/ico_arrow_blue.svg');
         }
       }
       &.active {
