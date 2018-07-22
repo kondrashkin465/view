@@ -89,7 +89,7 @@
 <script>
 import Share from '@/components/common/Share'
 import { uniq } from 'lodash'
-import MetaMixin from '@/engine/mixins/metaMixin'
+import MetaMixin from '@/mixins/metaMixin'
 
 export default {
   name: 'HelpPage',
@@ -110,29 +110,6 @@ export default {
   },
   beforeMount () {
     window.addEventListener('resize', this.handleResize)
-  },
-  created () {
-    request.then(this.$get.res({
-      ok: resp => {
-        this.faqModel = resp.page
-        if (this.$route.params.question) {
-          if (this.$get('page_' + this.$route.params.question)._fetched) {
-            this.activeQuestion = this.$route.params.question
-          } else {
-            this.$router.replace({ name: '404' })
-            return
-          }
-        } else {
-          this.activeQuestion = this.faqModel.find(question => question.idx === this.activeCategory).url
-        }
-        this.$router.replace({
-          name: 'HelpOpen',
-          params: {
-            question: this.activeQuestion
-          }
-        })
-      }
-    }))
   },
   computed: {
     categoryFaq () {
